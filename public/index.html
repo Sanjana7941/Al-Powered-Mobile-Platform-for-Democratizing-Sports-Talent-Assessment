@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AthletaVision AI - Democratizing Sports Talent Assessment (Mobile & PC)</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="app-header glass">
+    <div class="logo">
+      <div class="logo-icon"><i data-lucide="activity"></i></div>
+      <span class="logo-text">AthletaVision <span class="accent-text">AI</span></span>
+    </div>
+    <div class="user-status-bar" id="header-user-status" style="display: none;">
+      <img id="header-avatar" class="user-avatar" src="" alt="Profile">
+      <div class="user-info">
+        <span id="header-name" class="user-name">Athlete Name</span>
+        <span id="header-role" class="user-role">Athlete</span>
+      </div>
+      <button class="icon-btn btn-logout" id="btn-logout" title="Sign Out">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="app-container">
+
+    <!-- 1. AUTH VIEW -->
+    <section id="view-auth" class="app-view auth-view active">
+      <div class="auth-card glass">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login">Login</button>
+          <button class="auth-tab" id="tab-register">Register</button>
+        </div>
+        
+        <!-- Login Form -->
+        <form id="form-login" class="auth-form active">
+          <div class="form-header">
+            <h2>Welcome Back</h2>
+            <p>Access your sports talent analytics and drills</p>
+          </div>
+          <div class="form-group">
+            <label for="login-username"><i data-lucide="user"></i> Username</label>
+            <input type="text" id="login-username" placeholder="Enter username" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password"><i data-lucide="lock"></i> Password</label>
+            <input type="password" id="login-password" placeholder="Enter password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign In <i data-lucide="arrow-right"></i></button>
+          <div class="auth-demo-hint">
+            <p>Demo accounts (password: <strong>password123</strong>):</p>
+            <p>Athlete: <code>athlete_kofi</code> | Scout: <code>scout_alex</code></p>
+          </div>
+        </form>
+
+        <!-- Registration Form -->
+        <form id="form-register" class="auth-form">
+          <div class="form-header">
+            <h2>Create Account</h2>
+            <p>Join the decentralized sports talent marketplace</p>
+          </div>
+          <div class="form-group">
+            <label for="reg-name"><i data-lucide="user-check"></i> Full Name</label>
+            <input type="text" id="reg-name" placeholder="Enter full name" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-username"><i data-lucide="at-sign"></i> Username</label>
+            <input type="text" id="reg-username" placeholder="Choose unique username" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-password"><i data-lucide="lock"></i> Password</label>
+            <input type="password" id="reg-password" placeholder="Minimum 6 characters" required>
+          </div>
+          <div class="form-group">
+            <label><i data-lucide="shield"></i> Account Type</label>
+            <div class="role-selector">
+              <label class="role-option active">
+                <input type="radio" name="reg-role" value="athlete" checked>
+                <div class="role-box">
+                  <i data-lucide="award"></i>
+                  <span>Athlete</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="reg-role" value="scout">
+                <div class="role-box">
+                  <i data-lucide="search"></i>
+                  <span>Scout / Coach</span>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Athlete Specific Fields -->
+          <div id="athlete-fields" class="conditional-fields">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-sport"><i data-lucide="dribbble"></i> Primary Sport</label>
+                <select id="reg-sport">
+                  <option value="Football">Football (Soccer)</option>
+                  <option value="Basketball">Basketball</option>
+                  <option value="Athletics">Athletics (Sprinting)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="reg-age"><i data-lucide="calendar"></i> Age</label>
+                <input type="number" id="reg-age" placeholder="Age" min="8" max="99">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-bio"><i data-lucide="file-text"></i> Short Bio</label>
+            <textarea id="reg-bio" placeholder="Briefly describe your athletic goals or credentials..." rows="2"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Register Account <i data-lucide="user-plus"></i></button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. ATHLETE DASHBOARD -->
+    <section id="view-athlete-dashboard" class="app-view">
+      <div class="welcome-banner glass">
+        <h1 class="glow-text">Hello, <span id="dash-athlete-name">Athlete</span>!</h1>
+        <p>Your talent metrics are tracked and verified by AthletaVision AI.</p>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="stats-grid">
+        <div class="stat-card glass">
+          <div class="stat-header">
+            <span class="stat-label">AI overall Rating</span>
+            <i data-lucide="trending-up" class="color-primary"></i>
+          </div>
+          <div class="stat-value" id="dash-overall-score">--</div>
+          <span class="stat-desc">Based on evaluated drills</span>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-header">
+            <span class="stat-label">Completed Drills</span>
+            <i data-lucide="check-circle" class="color-secondary"></i>
+          </div>
+          <div class="stat-value" id="dash-drill-count">0</div>
+          <span class="stat-desc">Verified assessments</span>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-header">
+            <span class="stat-label">Scout Connections</span>
+            <i data-lucide="handshake" class="color-accent"></i>
+          </div>
+          <div class="stat-value" id="dash-connections-count">0</div>
+          <span class="stat-desc">Active trial invitations</span>
+        </div>
+      </div>
+
+      <!-- Chart and Detailed Ratings -->
+      <div class="dashboard-details">
+        <div class="detail-card glass chart-card">
+          <h3>Athletic Profile Radar</h3>
+          <div class="chart-container">
+            <canvas id="athleteRadarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="detail-card glass tips-card">
+          <h3><i data-lucide="sparkles"></i> AI Coaching Insights</h3>
+          <div id="ai-tips-container" class="tips-list">
+            <!-- Dynamic coaching tips -->
+            <div class="tip-item">
+              <i data-lucide="shield-alert" class="tip-icon color-primary"></i>
+              <div class="tip-content">
+                <h4>No Assessments Yet</h4>
+                <p>Head over to the AI Assessment tab to scan your first sports movement!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent History -->
+      <div class="history-card glass">
+        <div class="card-header">
+          <h3>Recent Performance Scans</h3>
+          <button class="text-btn btn-assess-nav">New Scan <i data-lucide="plus"></i></button>
+        </div>
+        <div class="history-list" id="athlete-history-list">
+          <div class="empty-state">
+            <p>No assessment sessions recorded. Let's record one now!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. AI ASSESSMENT TERMINAL -->
+    <section id="view-assess" class="app-view">
+      <div class="view-header">
+        <h2>AI Motion Scanner</h2>
+        <p>Capture movement with your camera or upload a video clip</p>
+      </div>
+
+      <div class="assess-setup-card glass">
+        <div class="form-group">
+          <label for="assess-drill-select"><i data-lucide="target"></i> Select Sport Drill</label>
+          <select id="assess-drill-select">
+            <!-- Options dynamically populated by sport -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Scanner Workspace -->
+      <div class="scanner-wrapper glass">
+        <!-- Overlay HUD -->
+        <div class="scanner-hud">
+          <div class="hud-top">
+            <span class="hud-tag"><i data-lucide="cpu"></i> SYSTEM: READY</span>
+            <span class="hud-fps" id="hud-fps">FPS: --</span>
+          </div>
+          <div class="hud-bottom">
+            <span class="hud-metric">POSE STABILITY: <span id="hud-stability">--</span></span>
+            <span class="hud-metric">DRILL: <span id="hud-drill-name">NONE</span></span>
+          </div>
+        </div>
+
+        <!-- Camera / Video Feed Canvas -->
+        <div class="feed-container">
+          <video id="video-feed" playsinline muted style="display: none;"></video>
+          <canvas id="scanner-canvas"></canvas>
+          
+          <!-- Large center scanning prompt -->
+          <div class="scanner-prompt" id="scanner-prompt">
+            <i data-lucide="video" class="prompt-icon"></i>
+            <p>Start Camera or Upload a video to begin analysis</p>
+          </div>
+
+          <!-- Scan Grid Animation Overlay -->
+          <div class="scanner-grid-overlay" id="scanner-grid"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="scanner-controls">
+          <button class="btn btn-secondary" id="btn-start-camera"><i data-lucide="camera"></i> Start WebCam</button>
+          <button class="btn btn-secondary file-upload-wrapper">
+            <i data-lucide="upload"></i> Upload Video
+            <input type="file" id="video-file-input" accept="video/*">
+          </button>
+          <button class="btn btn-primary" id="btn-run-analysis" disabled><i data-lucide="play-circle"></i> Start AI Scan</button>
+        </div>
+      </div>
+
+      <!-- Real-time terminal log feed -->
+      <div class="terminal-log-card glass">
+        <div class="terminal-header">
+          <span>AI Engine Log Feed</span>
+          <span class="blinking-dot"></span>
+        </div>
+        <div class="terminal-body" id="terminal-log-body">
+          <div class="log-line system">[SYS] AthletaVision Neural Engine loaded. Waiting for frame buffer...</div>
+        </div>
+      </div>
+
+      <!-- Results Modal -->
+      <div class="modal" id="results-modal">
+        <div class="modal-content glass">
+          <div class="modal-header">
+            <h2><i data-lucide="award"></i> AI Assessment Result</h2>
+            <button class="close-btn" id="btn-close-results">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="result-score-container">
+              <div class="score-circle">
+                <span class="score-num" id="res-overall-score">85</span>
+                <span class="score-label">OVERALL</span>
+              </div>
+              <div class="sub-scores">
+                <div class="sub-score-bar">
+                  <div class="bar-labels">
+                    <span>Technique</span>
+                    <span id="res-tech-val">80%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" id="res-tech-fill" style="width: 80%"></div>
+                  </div>
+                </div>
+                <div class="sub-score-bar">
+                  <div class="bar-labels">
+                    <span>Speed & Agility</span>
+                    <span id="res-speed-val">85%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" id="res-speed-fill" style="width: 85%"></div>
+                  </div>
+                </div>
+                <div class="sub-score-bar">
+                  <div class="bar-labels">
+                    <span>Power & Force</span>
+                    <span id="res-power-val">90%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" id="res-power-fill" style="width: 90%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="feedback-card">
+              <h4>AI Coaching Notes:</h4>
+              <p id="res-feedback-text">Excellent movement. Your posture matches 92% similarity with baseline biomechanical markers.</p>
+            </div>
+            
+            <div class="modal-actions">
+              <button class="btn btn-secondary" id="btn-discard-result">Discard</button>
+              <button class="btn btn-primary" id="btn-save-result"><i data-lucide="save"></i> Save and Publish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SCOUT HUB / TALENTS LIST -->
+    <section id="view-scout-dashboard" class="app-view">
+      <div class="welcome-banner glass">
+        <h1>Talent Directory</h1>
+        <p>Explore assessed athletes ranked by verified AI biomechanics ratings.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-card glass">
+        <div class="search-bar-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="scout-search-input" placeholder="Search athletes by name...">
+        </div>
+        <div class="sport-filters">
+          <button class="filter-chip active" data-sport="">All Sports</button>
+          <button class="filter-chip" data-sport="Football">Football</button>
+          <button class="filter-chip" data-sport="Basketball">Basketball</button>
+          <button class="filter-chip" data-sport="Athletics">Athletics</button>
+        </div>
+      </div>
+
+      <!-- Athletes Leaderboard Grid -->
+      <div class="athletes-grid" id="scout-athletes-grid">
+        <!-- Dynamic Athlete Cards -->
+      </div>
+
+      <!-- Athlete Detail Modal for Scouts -->
+      <div class="modal" id="athlete-detail-modal">
+        <div class="modal-content glass max-w-lg">
+          <div class="modal-header">
+            <h2 id="scout-modal-title">Athlete Profile</h2>
+            <button class="close-btn" id="btn-close-scout-modal">&times;</button>
+          </div>
+          <div class="modal-body" id="scout-modal-body">
+            <!-- Dynamic profile template -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. DRILL LIBRARY -->
+    <section id="view-drills" class="app-view">
+      <div class="view-header">
+        <h2>Drill Tutorial Library</h2>
+        <p>Learn core sports drills to capture and analyze on our platform.</p>
+      </div>
+      
+      <div class="drills-grid" id="drills-grid-container">
+        <!-- Dynamic drill cards -->
+      </div>
+    </section>
+
+    <!-- 6. ACTIVE CONNECTIONS / INVITES -->
+    <section id="view-connections" class="app-view">
+      <div class="view-header">
+        <h2>Scouting Connections</h2>
+        <p>Invitations, connection logs, and contact history.</p>
+      </div>
+
+      <div class="connections-wrapper">
+        <div class="connections-card glass">
+          <h3>Trial Requests</h3>
+          <div class="connections-list" id="connections-list-container">
+            <div class="empty-state">
+              <p>No active connections. Scouts can request contact details here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar (Dynamic Options) -->
+  <nav class="app-nav glass" id="bottom-nav">
+    <!-- Items dynamically loaded depending on athlete or scout role -->
+  </nav>
+
+  <!-- Status Notification Toasts -->
+  <div id="toast-notification" class="toast">Notification Message</div>
+
+  <!-- Client-side Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/assessment.js"></script>
+  <script src="js/scout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
