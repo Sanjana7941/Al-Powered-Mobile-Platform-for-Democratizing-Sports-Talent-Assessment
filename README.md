@@ -121,7 +121,7 @@ AI-Powered-Mobile-Platform/
 
 ## 🎥 Prototype Video 
 
-
+https://drive.google.com/file/d/1V2y7WgsGpn61zdxC34z8sKRv15Cftc6v/view?usp=drive_link
 
 ---
 
