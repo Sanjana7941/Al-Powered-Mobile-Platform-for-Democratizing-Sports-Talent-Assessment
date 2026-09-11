@@ -127,7 +127,7 @@ https://drive.google.com/file/d/14_0AgJsOFtB_PfAuJ97TZ9HeJABFtB5E/view?usp=drive
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License
 
 ---
 
